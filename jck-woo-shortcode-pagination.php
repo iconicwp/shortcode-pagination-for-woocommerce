@@ -49,17 +49,17 @@ class JCK_WSP {
      * Run on Plugins Loaded hook
      */
 
-	public function plugins_loaded() {
+    public function plugins_loaded() {
 
         $this->textdomain();
 
-	}
+    }
 
     /**
      * Run after the current user is set (http://codex.wordpress.org/Plugin_API/Action_Reference)
      */
 
-	public function initiate_hook() {
+     public function initiate_hook() {
 
         if( !is_admin() ) {
 
@@ -69,7 +69,7 @@ class JCK_WSP {
 
         }
 
-	}
+    }
 
     /**
      * Load plugin textdomain
@@ -77,17 +77,17 @@ class JCK_WSP {
 
     public function textdomain() {
 
-		load_plugin_textdomain( 'jck-wsp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+        load_plugin_textdomain( 'jck-wsp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 
-	}
+    }
 
-	/**
-	 * Frontend: Add the paged param to the shortcode product query
-	 *
-	 * @param obj $query WP_Query
-	 */
+    /**
+     * Frontend: Add the paged param to the shortcode product query
+     *
+     * @param obj $query WP_Query
+     */
 
-	public function add_paged_param( $query ) {
+     public function add_paged_param( $query ) {
 
         global $woocommerce_loop;
 
