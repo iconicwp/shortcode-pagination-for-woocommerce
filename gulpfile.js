@@ -109,37 +109,14 @@ var paths = {
     *
     ============================= */
 
-	// Run to compile plugin zip
-	gulp.task('prepare_plugin_files', function () {
+    // Run to compile plugin zip
+    gulp.task('move_to_trunk', function () {
 
-    	var plugin_src = 'tmp/'+plugin_filename+'/';
+        return gulp.src(paths.src, {base: "."})
+            .pipe( gulp.dest('svn/trunk') )
+            .pipe( notify({ message: 'Plugin moved to trunk' }) );
 
-    	return gulp.src(paths.src, {base: "."})
-            .pipe(gulp.dest(plugin_src));
-
-	});
-
-	// Run to compile plugin zip
-	gulp.task('create_plugin_zip', ['prepare_plugin_files'], function () {
-
-    	var plugin_src = 'tmp/'+plugin_filename+'/';
-
-	    return gulp.src(plugin_src+"**/*", {base: "./tmp"})
-	        .pipe( zip(plugin_zip_name) )
-	        .pipe( gulp.dest('dist') )
-	        .pipe( notify({ message: 'Plugin zip Created' }) );
-
-	});
-
-	// Run to compile zip of plugin, readme and licenses
-	gulp.task('create_main_zip', ['create_plugin_zip'], function () {
-
-	    return gulp.src(paths.cc_src, {cwd: __dirname + "/dist"})
-	        .pipe(zip('main_files.zip'))
-	        .pipe(gulp.dest('codecanyon'))
-	        .pipe(notify({ message: 'Main files zipped for CodeCanyon' }));
-
-	});
+    });
 
 	// RUN THIS TO COMPILE FOR CC (gulp compile)
-	gulp.task('compile', ['create_main_zip']);
+	gulp.task('compile', ['move_to_trunk']);
