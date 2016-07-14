@@ -21,5 +21,9 @@ To install the plugin:
 4. The plugin is now installed and activated.
 
 == Changelog ==
+v1.0.1 (14/07/2016)
+[fix] Compatibility with Woo 2.6
+[update] Now works with product_category, recent_products, featured_products, best_selling_products, and top_rated_products shortcodes
+
 v1.0.0 (23/11/2015)
 Initial Release

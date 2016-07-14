@@ -29,8 +29,8 @@ class JCK_WSP {
 
         $this->set_constants();
 
-        add_action( 'plugins_loaded',   array( $this, 'plugins_loaded' ) );
-        add_action( 'init',             array( $this, 'initiate_hook' ) );
+        add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+        add_action( 'init', array( $this, 'initiate_hook' ) );
 
     }
 
@@ -63,9 +63,9 @@ class JCK_WSP {
 
         if( !is_admin() ) {
 
-            add_action( 'pre_get_posts',                    array( $this, 'add_paged_param' ) );
-            add_action( 'loop_end',                         array( $this, 'loop_end' ) );
-            add_action( 'woocommerce_after_template_part',  array( $this, 'add_pagination' ) );
+            add_action( 'pre_get_posts', array( $this, 'add_paged_param' ) );
+            add_action( 'loop_end', array( $this, 'loop_end' ), 100 );
+            add_action( 'woocommerce_after_template_part', array( $this, 'add_pagination' ), 10, 4 );
 
         }
 
@@ -89,27 +89,22 @@ class JCK_WSP {
 
      public function add_paged_param( $query ) {
 
-        global $woocommerce_loop;
-
         // Get paged from main query only
         // ! frontpage missing the post_type
 
-        $post_type = ( isset( $query->query['post_type'] ) ) ? $query->query['post_type'] : false;
+        $is_product_query = $this->is_product_query( $query );
+        $paged = get_query_var('paged') ? get_query_var('paged') : 1;
 
-        if ( $query->is_main_query() && ( $post_type == 'product' || !$post_type ) ) {
-
-            if ( isset($query->query['paged']) ){
-                $woocommerce_loop['paged'] = $query->query['paged'];
-            }
+        if ( $query->is_main_query() && $is_product_query ) {
+            $GLOBALS['woocommerce_loop']['paged'] = $paged;
         }
 
-        if ( ! $query->is_post_type_archive || $post_type !== 'product' ){
+        if ( $query->is_post_type_archive || !$is_product_query )
             return;
-        }
 
         $query->is_paged = true;
-        $query->query['paged'] = $woocommerce_loop['paged'];
-        $query->query_vars['paged'] = $woocommerce_loop['paged'];
+        $query->query['paged'] = $paged;
+        $query->query_vars['paged'] = $paged;
 
     }
 
@@ -121,20 +116,40 @@ class JCK_WSP {
 
     public function loop_end( $query ) {
 
-        if ( ! $query->is_post_type_archive || $query->query['post_type'] !== 'product' ){
+        if ( $query->is_post_type_archive || !$this->is_product_query( $query ) ){
             return;
         }
 
-        // Cache data for pagination
-        global $woocommerce_loop;
+        $paged = get_query_var('paged') ? get_query_var('paged') : 1;
 
-        $paged = ( isset( $woocommerce_loop['paged'] ) ) ? $woocommerce_loop['paged'] : 1;
+        $GLOBALS['woocommerce_loop']['pagination']['paged'] = $paged;
+        $GLOBALS['woocommerce_loop']['pagination']['found_posts'] = $query->found_posts;
+        $GLOBALS['woocommerce_loop']['pagination']['max_num_pages'] = $query->max_num_pages;
+        $GLOBALS['woocommerce_loop']['pagination']['post_count'] = $query->post_count;
+        $GLOBALS['woocommerce_loop']['pagination']['current_post'] = $query->current_post;
 
-        $woocommerce_loop['pagination']['paged'] = $paged;
-        $woocommerce_loop['pagination']['found_posts'] = $query->found_posts;
-        $woocommerce_loop['pagination']['max_num_pages'] = $query->max_num_pages;
-        $woocommerce_loop['pagination']['post_count'] = $query->post_count;
-        $woocommerce_loop['pagination']['current_post'] = $query->current_post;
+    }
+
+    /**
+     * Helper: Is query for products?
+     *
+     * @param $query
+     * @return bool
+     */
+    public function is_product_query( $query ) {
+
+        if( !isset( $query->query['post_type'] ) )
+            return false;
+
+        $post_type = $query->query['post_type'];
+
+        if( is_array( $post_type ) && in_array('product', $post_type) )
+            return true;
+
+        if( $post_type == "product" )
+            return true;
+
+        return false;
 
     }
 
@@ -144,29 +159,69 @@ class JCK_WSP {
      * @param str $template_name
      */
 
-    public function add_pagination( $template_name ) {
+    public function add_pagination( $template_name, $template_path, $located, $args ) {
 
-        if ( ! ( $template_name === 'loop/loop-end.php' && ( is_page() || is_single() ) ) ){
+        global $post;
+
+        if ( $template_name !== 'loop/loop-end.php' )
             return;
-        }
 
-        global $wp_query, $woocommerce_loop;
+        $queried_post = get_queried_object();
 
-        if ( ! isset( $woocommerce_loop['pagination'] ) ){
+        if( !$queried_post || !isset( $queried_post->post_content ) )
             return;
-        }
 
-        $wp_query->query_vars['paged'] = $woocommerce_loop['pagination']['paged'];
-        $wp_query->query['paged'] = $woocommerce_loop['pagination']['paged'];
-        $wp_query->max_num_pages = $woocommerce_loop['pagination']['max_num_pages'];
-        $wp_query->found_posts = $woocommerce_loop['pagination']['found_posts'];
-        $wp_query->post_count = $woocommerce_loop['pagination']['post_count'];
-        $wp_query->current_post = $woocommerce_loop['pagination']['current_post'];
+        if( !$this->has_woo_shortcodes( $queried_post->post_content ) )
+            return;
+
+        global $wp_query;
+
+        if ( ! isset( $GLOBALS['woocommerce_loop']['pagination'] ) )
+            return;
+
+        $wp_query->query_vars['paged'] = $GLOBALS['woocommerce_loop']['pagination']['paged'];
+        $wp_query->query['paged'] = $GLOBALS['woocommerce_loop']['pagination']['paged'];
+        $wp_query->max_num_pages = $GLOBALS['woocommerce_loop']['pagination']['max_num_pages'];
+        $wp_query->found_posts = $GLOBALS['woocommerce_loop']['pagination']['found_posts'];
+        $wp_query->post_count = $GLOBALS['woocommerce_loop']['pagination']['post_count'];
+        $wp_query->current_post = $GLOBALS['woocommerce_loop']['pagination']['current_post'];
 
         // Custom pagination function or default woocommerce_pagination()
         woocommerce_pagination();
 
     }
+
+    /**
+     * Helper: Has shortcodes
+     *
+     * @param str $content
+     * @return bool
+     */
+    public function has_woo_shortcodes( $content ) {
+
+        $shortcodes = apply_filters('jck-wsp-shortcodes', array(
+            'product_category',
+            'recent_products',
+            'featured_products',
+            'sale_products',
+            'best_selling_products',
+            'top_rated_products'
+        ));
+
+        if( empty( $shortcodes ) )
+            return false;
+
+        foreach( $shortcodes as $shortcode ) {
+
+            if( has_shortcode( $content, $shortcode ) )
+                return true;
+
+        }
+
+        return false;
+
+    }
+
 
 }
 
