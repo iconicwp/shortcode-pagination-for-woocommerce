@@ -5,7 +5,7 @@ Requires at least: 4.3.1
 Tested up to: 4.5.3
 Stable tag: 4.5.3
 
-Add pagination to the WooCommerce [product_category] shortcode
+Add pagination to WooCommerce shortcodes
 
 == Description ==
 WooCommerce shortcodes do not have pagination by default. This is a simple plugin that adds it, using the default woocommerce_pagination function.
