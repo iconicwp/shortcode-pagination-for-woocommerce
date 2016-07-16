@@ -38,6 +38,10 @@ To install the plugin:
 4. The plugin is now installed and activated.
 
 == Changelog ==
+
+v1.0.3 (16/07/2016)
+[fix] Fix post type archive check
+
 v1.0.2 (14/07/2016)
 [update] Enable for sale_products shortcode
 

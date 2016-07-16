@@ -3,7 +3,7 @@
 Plugin Name: Shortcode Pagination for WooCommerce
 Plugin URI: http://www.jckemp.com
 Description: Adds pagination to WooCommerce Product Category Shortcode
-Version: 1.0.2
+Version: 1.0.3
 Author: James Kemp
 Author URI: http://www.jckemp.com
 Text Domain: jck-wsp
@@ -17,7 +17,7 @@ class JCK_WSP {
     public $name = 'WooCommerce Shortcode Pagination';
     public $shortname = 'Shortcode Pagination';
     public $slug = 'jck-wsp';
-    public $version = "1.0.2";
+    public $version = "1.0.3";
     public $plugin_path;
     public $plugin_url;
 
@@ -67,8 +67,6 @@ class JCK_WSP {
             add_action( 'loop_end', array( $this, 'loop_end' ), 100 );
             add_action( 'woocommerce_after_template_part', array( $this, 'add_pagination' ), 10, 4 );
 
-            add_filter( 'woocommerce_shortcode_products_query', array( $this, 'shortcode_products_query' ), 10, 3 );
-
         }
 
     }
@@ -91,9 +89,6 @@ class JCK_WSP {
 
      public function add_paged_param( $query ) {
 
-        if( !$this->has_pagination( $query ) )
-            return;
-
         // Get paged from main query only
         // ! frontpage missing the post_type
 
@@ -104,7 +99,7 @@ class JCK_WSP {
             $GLOBALS['woocommerce_loop']['paged'] = $paged;
         }
 
-        if ( $query->is_post_type_archive || !$is_product_query )
+        if ( is_archive() || is_post_type_archive() || !$is_product_query )
             return;
 
         $query->is_paged = true;
@@ -123,10 +118,7 @@ class JCK_WSP {
 
     public function loop_end( $query ) {
 
-        if( !$this->has_pagination( $query ) )
-            return;
-
-        if ( $query->is_post_type_archive || !$this->is_product_query( $query ) )
+        if ( is_archive() || is_post_type_archive() || !$this->is_product_query( $query ) )
             return;
 
         $paged = get_query_var('paged') ? get_query_var('paged') : 1;
@@ -136,17 +128,6 @@ class JCK_WSP {
         $GLOBALS['woocommerce_loop']['pagination']['max_num_pages'] = $query->max_num_pages;
         $GLOBALS['woocommerce_loop']['pagination']['post_count'] = $query->post_count;
         $GLOBALS['woocommerce_loop']['pagination']['current_post'] = $query->current_post;
-
-    }
-
-    /**
-     * Helper: Has pagination?
-     *
-     * @param $query
-     */
-    public function has_pagination( $query ) {
-
-        return isset( $query->query['pagination'] ) && $query->query['pagination'] ? true : false;
 
     }
 
@@ -196,7 +177,7 @@ class JCK_WSP {
 
         global $wp_query;
 
-        if ( !isset( $GLOBALS['woocommerce_loop']['pagination'] ) )
+        if ( ! isset( $GLOBALS['woocommerce_loop']['pagination'] ) )
             return;
 
         $wp_query->query_vars['paged'] = $GLOBALS['woocommerce_loop']['pagination']['paged'];
@@ -239,24 +220,6 @@ class JCK_WSP {
         }
 
         return false;
-
-    }
-
-    /**
-     * Add pagination to shortcode if
-     * shortcode att is set
-     *
-     * @to-do Waiting for PR to WooCommerce
-     */
-    public function shortcode_products_query( $query_args, $atts, $loop_name ) {
-
-        error_log( print_r( $query_args, true ) );
-        error_log( print_r( $atts, true ) );
-        error_log( print_r( $loop_name, true ) );
-
-        $query_args['pagination'] = true;
-
-        return $query_args;
 
     }
 
