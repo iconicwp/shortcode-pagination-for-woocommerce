@@ -1,9 +1,9 @@
 === Shortcode Pagination for WooCommerce ===
-Contributors: jamesckemp
+Contributors: iconicwp
 Donate link: https://www.paypal.me/jamesckemp
 Requires at least: 4.3.1
-Tested up to: 4.5.3
-Stable tag: 4.5.3
+Tested up to: 4.6
+Stable tag: 4.6
 
 Add pagination to WooCommerce shortcodes
 
@@ -38,6 +38,9 @@ To install the plugin:
 4. The plugin is now installed and activated.
 
 == Changelog ==
+
+v1.0.4 (07/10/2016)
+[fix] Changed paged var for static front page
 
 v1.0.3 (16/07/2016)
 [fix] Fix post type archive check
