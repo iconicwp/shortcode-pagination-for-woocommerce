@@ -26,3 +26,4 @@ tmp/
 node_modules/
 svn/
 /vendor/
+composer.lock
