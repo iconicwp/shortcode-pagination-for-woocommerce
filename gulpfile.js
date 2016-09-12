@@ -30,6 +30,13 @@ var paths = {
     cc_src: ['**/*']
 };
 
+var deps = {
+    // 'src' : 'dest'
+
+    'vendor/jamesckemp/iconic-dashboard/class-dashboard.php' : 'inc/admin/vendor'
+
+};
+
 /**	=============================
     *
     * Tasks
@@ -100,6 +107,18 @@ var paths = {
 
 	});
 
+	/**
+     * Move components
+     */
+    gulp.task('deps', function() {
+
+        for (var key in deps) {
+            gulp.src( key )
+                .pipe( gulp.dest( deps[key] ) );
+        }
+
+    });
+
 	// The default task (called when you run `gulp` from cli)
 	gulp.task('default', ['watch']);
 
@@ -119,4 +138,4 @@ var paths = {
     });
 
 	// RUN THIS TO COMPILE FOR CC (gulp compile)
-	gulp.task('compile', ['move_to_trunk']);
+	gulp.task('compile', ['deps', 'move_to_trunk']);

@@ -25,3 +25,4 @@ codecanyon/
 tmp/
 node_modules/
 svn/
+/vendor/

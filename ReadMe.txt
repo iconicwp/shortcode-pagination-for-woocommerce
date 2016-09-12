@@ -39,7 +39,11 @@ To install the plugin:
 
 == Changelog ==
 
-v1.0.4 (07/10/2016)
+v1.0.5 (12/09/2016)
+[fix] Fixed issue when using on front_page
+[update] Added Iconic dashboard
+
+v1.0.4 (07/09/2016)
 [fix] Changed paged var for static front page
 
 v1.0.3 (16/07/2016)

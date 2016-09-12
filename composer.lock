@@ -1,0 +1,38 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "d23bc410b366b949f34bb6f5407b45c5",
+    "content-hash": "ea50c2fb3aa87359b0d276cfb513b480",
+    "packages": [
+        {
+            "name": "jamesckemp/iconic-dashboard",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "git@bitbucket.org:jamesckemp/iconic-dashboard.git",
+                "reference": "bdb8de8fd4c18a97bc6a51d931065a650231099c"
+            },
+            "type": "library",
+            "authors": [
+                {
+                    "name": "James Kemp",
+                    "email": "support@iconicwp.com"
+                }
+            ],
+            "time": "2016-09-12 19:25:30"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "jamesckemp/iconic-dashboard": 20
+    },
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}

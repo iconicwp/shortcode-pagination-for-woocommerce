@@ -1,0 +1,18 @@
+{
+    "name": "jamesckemp/jck-woo-shortcode-pagination",
+    "authors": [
+        {
+            "name": "James Kemp",
+            "email": "support@iconicwp.com"
+        }
+    ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "git@bitbucket.org:jamesckemp/iconic-dashboard.git"
+        }
+    ],
+    "require": {
+        "jamesckemp/iconic-dashboard": "dev-master"
+    }
+}
