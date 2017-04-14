@@ -3,7 +3,7 @@
 Plugin Name: Shortcode Pagination for WooCommerce
 Plugin URI: http://www.jckemp.com
 Description: Adds pagination to WooCommerce Product Category Shortcode
-Version: 1.0.5
+Version: 1.0.6
 Author: James Kemp
 Author URI: http://www.jckemp.com
 Text Domain: jck-wsp
@@ -17,7 +17,7 @@ class JCK_WSP {
     public $name = 'WooCommerce Shortcode Pagination';
     public $shortname = 'Shortcode Pagination';
     public $slug = 'jck-wsp';
-    public $version = "1.0.5";
+    public $version = "1.0.6";
     public $plugin_path;
     public $plugin_url;
 
@@ -69,6 +69,8 @@ class JCK_WSP {
             add_action( 'loop_end', array( $this, 'loop_end' ), 100 );
             add_action( 'woocommerce_after_template_part', array( $this, 'add_pagination' ), 10, 4 );
 
+            add_filter( 'woocommerce_shortcode_products_query', array( __CLASS__, 'shortcode_products_query_args' ), 10, 3 );
+
         }
 
     }
@@ -116,7 +118,7 @@ class JCK_WSP {
     /**
      * Get paged var
      */
-    public function get_paged_var() {
+    public static function get_paged_var() {
 
         $query_var = is_front_page() ? 'page' : 'paged';
         return get_query_var( $query_var ) ? get_query_var( $query_var ) : 1;
@@ -134,7 +136,7 @@ class JCK_WSP {
         if ( is_archive() || is_post_type_archive() || !$this->is_product_query( $query ) )
             return;
 
-        $paged = $this->get_paged_var();
+        $paged = self::get_paged_var();
 
         $GLOBALS['woocommerce_loop']['pagination']['paged'] = $paged;
         $GLOBALS['woocommerce_loop']['pagination']['found_posts'] = $query->found_posts;
@@ -233,6 +235,23 @@ class JCK_WSP {
         }
 
         return false;
+
+    }
+
+    /**
+     * Shortcode products query args.
+     *
+     * @param array $query_args
+     * @param array $atts
+     * @param string $loop_name
+     *
+     * @return array
+     */
+    public static function shortcode_products_query_args( $query_args, $atts, $loop_name ) {
+
+	    $query_args['paged'] = self::get_paged_var();
+
+	    return $query_args;
 
     }
 

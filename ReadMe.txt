@@ -2,8 +2,8 @@
 Contributors: iconicwp
 Donate link: https://www.paypal.me/jamesckemp
 Requires at least: 4.3.1
-Tested up to: 4.6
-Stable tag: 4.6
+Tested up to: 4.7.3
+Stable tag: 4.7.3
 
 Add pagination to WooCommerce shortcodes
 
@@ -38,6 +38,9 @@ To install the plugin:
 4. The plugin is now installed and activated.
 
 == Changelog ==
+
+v1.0.6 (14/04/2017)
+[update] Compatibility with WooCommerce 3.0
 
 v1.0.5 (12/09/2016)
 [fix] Fixed issue when using on front_page
