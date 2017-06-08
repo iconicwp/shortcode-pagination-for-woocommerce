@@ -63,13 +63,14 @@ class JCK_WSP {
 
      public function initiate_hook() {
 
-        if( !is_admin() ) {
+        if( ! is_admin() ) {
 
             add_action( 'pre_get_posts', array( $this, 'add_paged_param' ) );
             add_action( 'loop_end', array( $this, 'loop_end' ), 100 );
             add_action( 'woocommerce_after_template_part', array( $this, 'add_pagination' ), 10, 4 );
 
             add_filter( 'woocommerce_shortcode_products_query', array( __CLASS__, 'shortcode_products_query_args' ), 10, 3 );
+            add_filter( 'woocommerce_composite_component_options_query_args', array( __CLASS__, 'composite_component_options_query_args' ), 10, 3 );
 
         }
 
@@ -98,7 +99,7 @@ class JCK_WSP {
 
         $is_product_query = $this->is_product_query( $query );
 
-        if ( is_archive() || is_post_type_archive() || !$is_product_query )
+        if ( is_archive() || is_post_type_archive() || ! $is_product_query )
             return;
 
         $paged = $this->get_paged_var();
@@ -154,16 +155,19 @@ class JCK_WSP {
      */
     public function is_product_query( $query ) {
 
-        if( !isset( $query->query['post_type'] ) )
+        if( ! isset( $query->query['post_type'] ) || ! empty( $query->query['p'] ) || isset( $query->query['composite_component'] ) ) {
             return false;
+        }
 
         $post_type = $query->query['post_type'];
 
-        if( is_array( $post_type ) && in_array('product', $post_type) )
+        if( is_array( $post_type ) && in_array('product', $post_type) ) {
             return true;
+        }
 
-        if( $post_type == "product" )
+        if( $post_type == "product" ) {
             return true;
+        }
 
         return false;
 
@@ -255,6 +259,20 @@ class JCK_WSP {
 
     }
 
+    /**
+     * Add arg to composite product component.
+     *
+     * @param array $args
+     * @param array $query_args
+     * @param array $component_data
+     *
+     * @return array
+     */
+    public static function composite_component_options_query_args( $args, $query_args, $component_data ) {
+	    $args['composite_component'] = true;
+
+	    return $args;
+    }
 
 }
 

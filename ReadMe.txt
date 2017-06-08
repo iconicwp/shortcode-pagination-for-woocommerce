@@ -37,6 +37,9 @@ To install the plugin:
 
 == Changelog ==
 
+v1.0.7 (-)
+[update] Compatibility with WooCommerce Composite Products
+
 v1.0.6 (14/04/2017)
 [update] Compatibility with WooCommerce 3.0
 
