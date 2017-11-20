@@ -20,10 +20,11 @@
 node_modules/
 .sass-cache
 
-# Uncomment for Production #
+# Project Files #
 codecanyon/
 tmp/
 node_modules/
 svn/
 /vendor/
 composer.lock
+/dist/
