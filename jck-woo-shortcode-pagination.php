@@ -32,8 +32,6 @@ class JCK_WSP {
         add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
         add_action( 'init', array( $this, 'initiate_hook' ) );
 
-        require_once( $this->plugin_path.'inc/admin/vendor/class-dashboard.php' );
-
     }
 
     /**
