@@ -3,7 +3,7 @@
 Plugin Name: Shortcode Pagination for WooCommerce
 Plugin URI: http://www.jckemp.com
 Description: Adds pagination to WooCommerce Product Category Shortcode
-Version: 1.0.7
+Version: 1.0.8
 Author: James Kemp
 Author URI: http://www.jckemp.com
 Text Domain: jck-wsp
@@ -17,7 +17,7 @@ class JCK_WSP {
     public $name = 'WooCommerce Shortcode Pagination';
     public $shortname = 'Shortcode Pagination';
     public $slug = 'jck-wsp';
-    public $version = "1.0.7";
+    public $version = "1.0.8";
     public $plugin_path;
     public $plugin_url;
 
