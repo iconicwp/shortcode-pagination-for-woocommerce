@@ -1,13 +1,15 @@
 <?php
 /*
-Plugin Name: Shortcode Pagination for WooCommerce
-Plugin URI: http://www.jckemp.com
-Description: Adds pagination to WooCommerce Product Category Shortcode
-Version: 1.0.8
-Author: James Kemp
-Author URI: http://www.jckemp.com
-Text Domain: jck-wsp
-*/
+ * Plugin Name: Shortcode Pagination for WooCommerce
+ * Plugin URI: http://www.jckemp.com
+ * Description: Adds pagination to WooCommerce Product Category Shortcode
+ * Version: 1.0.8
+ * Author: James Kemp
+ * Author URI: http://www.jckemp.com
+ * Text Domain: jck-wsp
+ * WC requires at least: 2.6.0
+ * WC tested up to: 3.2.3
+ */
 
 defined( 'JCK_WSP_PATH' ) or define( 'JCK_WSP_PATH', plugin_dir_path( __FILE__ ) );
 defined( 'JCK_WSP_URL' ) or define( 'JCK_WSP_URL', plugin_dir_url( __FILE__ ) );
