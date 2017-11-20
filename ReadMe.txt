@@ -9,9 +9,9 @@ Add pagination to WooCommerce shortcodes
 
 == Description ==
 
-==== Due to changes in WooCommerce 3.2.4, this plugin no longer works. I've looked into ways to get it working again but I'm coming up empty.====
+**Due to changes in WooCommerce 3.2.4, this plugin no longer works. I've looked into ways to get it working again but I'm coming up empty.**
 
-==== Feel free to take a look for yourself and [submit a PR](https://github.com/iconicwp/shortcode-pagination-for-woocommerce) if you find a solution, but for now I can't figure out a way to get this working again. Sorry :( ====
+**Feel free to take a look for yourself and [submit a PR](https://github.com/iconicwp/shortcode-pagination-for-woocommerce) if you find a solution, but for now I can't figure out a way to get this working again. Sorry :(**
 
 WooCommerce shortcodes do not have pagination by default. This is a simple plugin that adds it, using the default woocommerce_pagination function.
 
