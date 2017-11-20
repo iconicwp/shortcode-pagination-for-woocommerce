@@ -37,6 +37,9 @@ To install the plugin:
 
 == Changelog ==
 
+v1.0.8 (-)
+[update] Remove Iconic dashboard
+
 v1.0.7 (08/06/2017)
 [update] Compatibility with WooCommerce Composite Products
 
