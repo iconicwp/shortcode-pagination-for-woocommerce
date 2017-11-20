@@ -2,12 +2,17 @@
 Contributors: iconicwp
 Donate link: https://www.paypal.me/jamesckemp
 Requires at least: 4.3.1
-Tested up to: 4.7.5
+Tested up to: 4.9
 Stable tag: trunk
 
 Add pagination to WooCommerce shortcodes
 
 == Description ==
+
+==== Due to changes in WooCommerce 3.2.4, this plugin no longer works. I've looked into ways to get it working again but I'm coming up empty.====
+
+==== Feel free to take a look for yourself and [submit a PR](https://github.com/iconicwp/shortcode-pagination-for-woocommerce) if you find a solution, but for now I can't figure out a way to get this working again. Sorry :( ====
+
 WooCommerce shortcodes do not have pagination by default. This is a simple plugin that adds it, using the default woocommerce_pagination function.
 
 The plugin enables pagination for the following shortcodes:
@@ -39,6 +44,7 @@ To install the plugin:
 
 v1.0.8 (-)
 [update] Remove Iconic dashboard
+[update] Add notice to readme
 
 v1.0.7 (08/06/2017)
 [update] Compatibility with WooCommerce Composite Products
