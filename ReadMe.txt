@@ -42,7 +42,10 @@ To install the plugin:
 
 == Changelog ==
 
-v1.0.8 (-)
+v1.0.9 (23/11/2017)
+[update] Compatibility with 3.2.4+
+
+v1.0.8 (21/11/2017)
 [update] Remove Iconic dashboard
 [update] Add notice to readme
 
