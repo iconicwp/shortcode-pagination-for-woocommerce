@@ -8,7 +8,7 @@
  * Author URI: http://www.jckemp.com
  * Text Domain: jck-wsp
  * WC requires at least: 2.6.0
- * WC tested up to: 3.2.3
+ * WC tested up to: 3.2.4
  */
 
 defined( 'JCK_WSP_PATH' ) or define( 'JCK_WSP_PATH', plugin_dir_path( __FILE__ ) );
