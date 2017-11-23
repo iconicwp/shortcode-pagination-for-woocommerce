@@ -44,6 +44,7 @@ To install the plugin:
 
 v1.0.9 (23/11/2017)
 [update] Compatibility with 3.2.4+
+[update] Add 'pagination' param to shortcodes. When 'true', pagination will be displayed.
 
 v1.0.8 (21/11/2017)
 [update] Remove Iconic dashboard

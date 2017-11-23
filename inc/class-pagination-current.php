@@ -22,6 +22,7 @@ class Iconic_WSP_Pagination_Current {
 
 		add_filter( 'woocommerce_shortcode_products_query', array( __CLASS__, 'shortcode_products_query_args' ), 100, 3 );
 		self::add_pagination_to_shortcodes();
+		self::add_pagination_att_to_shortcodes();
 	}
 
 	/**
@@ -72,8 +73,19 @@ class Iconic_WSP_Pagination_Current {
 	public static function add_pagination_to_shortcodes() {
 		$shortcodes = Iconic_WSP_Pagination::get_shortcodes();
 
-		foreach( $shortcodes as $shortcode ) {
+		foreach ( $shortcodes as $shortcode ) {
 			add_action( 'woocommerce_shortcode_after_' . $shortcode . '_loop', array( __CLASS__, 'add_pagination' ), 10, 4 );
+		}
+	}
+
+	/**
+	 * Add pagination attribute to all shortcode types.
+	 */
+	public static function add_pagination_att_to_shortcodes() {
+		$shortcodes = Iconic_WSP_Pagination::get_shortcodes();
+
+		foreach ( $shortcodes as $shortcode ) {
+			add_filter( 'shortcode_atts_' . $shortcode, array( __CLASS__, 'add_pagination_att' ), 10, 4 );
 		}
 	}
 
@@ -83,7 +95,11 @@ class Iconic_WSP_Pagination_Current {
 	 * @param $atts
 	 */
 	public static function add_pagination( $atts ) {
-		$loop_type = str_replace( array( 'woocommerce_shortcode_after_', '_loop' ), '', current_action() );
+		if ( empty( $atts['pagination'] ) ) {
+			return;
+		}
+
+		$loop_type      = str_replace( array( 'woocommerce_shortcode_after_', '_loop' ), '', current_action() );
 		$transient_name = self::get_transient_name( $atts, $loop_type );
 		$query_data     = get_transient( $transient_name );
 
@@ -108,5 +124,21 @@ class Iconic_WSP_Pagination_Current {
 			?>
 		</nav>
 		<?php
+	}
+
+	/**
+	 * Add shortcode 'pagination' parameter.
+	 *
+	 * @param array  $out
+	 * @param array  $pairs
+	 * @param array  $atts
+	 * @param string $shortcode
+	 *
+	 * @return mixed
+	 */
+	public static function add_pagination_att( $out, $pairs, $atts, $shortcode ) {
+		$out['pagination'] = empty( $atts['pagination'] ) ? false : wc_string_to_bool( $atts['pagination'] );
+
+		return $out;
 	}
 }
