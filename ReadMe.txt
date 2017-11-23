@@ -37,6 +37,13 @@ To install the plugin:
 3. Once uploaded, click activate plugin.
 4. The plugin is now installed and activated.
 
+== Frequently Asked Questions ==
+
+= How do I enable the pagination? =
+
+If you‘re using WooCommerce 3.2.4+, you need to add `pagination="true"` to any shortcode where you want pagination enabled.
+For older versions of WooCommerce it is activated on all valid shortcodes.
+
 == Changelog ==
 
 v1.0.9 (23/11/2017)
