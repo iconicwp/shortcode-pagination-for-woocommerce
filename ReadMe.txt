@@ -5,18 +5,15 @@ Requires at least: 4.3.1
 Tested up to: 4.9
 Stable tag: trunk
 
-Add pagination to WooCommerce shortcodes
+Add pagination to WooCommerce product shortcodes
 
 == Description ==
 
-**Due to changes in WooCommerce 3.2.4, this plugin no longer works. I've looked into ways to get it working again but I'm coming up empty.**
-
-**Feel free to take a look for yourself and [submit a PR](https://github.com/iconicwp/shortcode-pagination-for-woocommerce) if you find a solution, but for now I can't figure out a way to get this working again. Sorry :(**
-
-WooCommerce shortcodes do not have pagination by default. This is a simple plugin that adds it, using the default woocommerce_pagination function.
+WooCommerce shortcodes do not have pagination by default. This is a simple plugin that adds it.
 
 The plugin enables pagination for the following shortcodes:
 
+* products
 * product_category
 * recent_products
 * featured_products
@@ -40,9 +37,20 @@ To install the plugin:
 3. Once uploaded, click activate plugin.
 4. The plugin is now installed and activated.
 
+== Frequently Asked Questions ==
+
+= How do I enable the pagination? =
+
+If you‘re using WooCommerce 3.2.4+, you need to add `pagination="true"` to any shortcode where you want pagination enabled.
+For older versions of WooCommerce it is activated on all valid shortcodes.
+
 == Changelog ==
 
-v1.0.8 (-)
+v1.0.9 (23/11/2017)
+[update] Compatibility with 3.2.4+
+[update] Add 'pagination' param to shortcodes. When 'true', pagination will be displayed.
+
+v1.0.8 (21/11/2017)
 [update] Remove Iconic dashboard
 [update] Add notice to readme
 

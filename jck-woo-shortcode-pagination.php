@@ -1,256 +1,103 @@
 <?php
 /*
  * Plugin Name: Shortcode Pagination for WooCommerce
- * Plugin URI: http://www.jckemp.com
- * Description: Adds pagination to WooCommerce Product Category Shortcode
- * Version: 1.0.8
+ * Plugin URI: https://iconicwp.com/products/shortcode-pagination-woocommerce/
+ * Description: Adds pagination to WooCommerce Product Shortcodes
+ * Version: 1.0.9
  * Author: James Kemp
- * Author URI: http://www.jckemp.com
+ * Author URI: https://iconicwp.com
  * Text Domain: jck-wsp
  * WC requires at least: 2.6.0
- * WC tested up to: 3.2.3
+ * WC tested up to: 3.2.4
  */
 
-defined( 'JCK_WSP_PATH' ) or define( 'JCK_WSP_PATH', plugin_dir_path( __FILE__ ) );
-defined( 'JCK_WSP_URL' ) or define( 'JCK_WSP_URL', plugin_dir_url( __FILE__ ) );
-
 class JCK_WSP {
-	public $name = 'WooCommerce Shortcode Pagination';
-
-	public $shortname = 'Shortcode Pagination';
-
-	public $slug = 'jck-wsp';
-
-	public $version = "1.0.8";
-
-	public $plugin_path;
-
-	public $plugin_url;
+	/**
+	 * Class prefix
+	 *
+	 * @since  4.5.0
+	 * @access protected
+	 * @var string $class_prefix
+	 */
+	protected $class_prefix = "Iconic_WSP_";
 
 	/**
-	 * Construct the plugin
+	 * Construct the plugin.
 	 */
 	public function __construct() {
-		$this->set_constants();
-
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
-		add_action( 'init', array( $this, 'initiate_hook' ) );
 	}
 
 	/**
-	 * Set up plugin constants
-	 */
-	public function set_constants() {
-		$this->plugin_path = JCK_WSP_PATH;
-		$this->plugin_url  = JCK_WSP_URL;
-	}
-
-	/**
-	 * Run on Plugins Loaded hook
+	 * Run on Plugins Loaded hook.
 	 */
 	public function plugins_loaded() {
 		$this->textdomain();
+		$this->load_classes();
 	}
 
 	/**
-	 * Run after the current user is set (http://codex.wordpress.org/Plugin_API/Action_Reference)
+	 * Load classes
 	 */
-	public function initiate_hook() {
-		if ( ! is_admin() ) {
-			add_action( 'pre_get_posts', array( $this, 'add_paged_param' ) );
-			add_action( 'loop_end', array( $this, 'loop_end' ), 100 );
-			add_action( 'woocommerce_after_template_part', array( $this, 'add_pagination' ), 10, 4 );
+	private function load_classes() {
+		spl_autoload_register( array( $this, 'autoload' ) );
 
-			add_filter( 'woocommerce_shortcode_products_query', array( __CLASS__, 'shortcode_products_query_args' ), 10, 3 );
-			add_filter( 'woocommerce_composite_component_options_query_args', array( __CLASS__, 'composite_component_options_query_args' ), 10, 3 );
+		Iconic_WSP_Pagination::run();
+
+		$pagination_version = self::get_pagination_version();
+		call_user_func( array( $pagination_version, 'run' ) );
+	}
+
+	/**
+	 * Get pagination version to run.
+	 *
+	 * @return string
+	 */
+	protected static function get_pagination_version() {
+		switch ( true ) {
+			case version_compare( WC_VERSION, '3.2.4', '>=' ):
+				return "Iconic_WSP_Pagination_Current";
+			case version_compare( WC_VERSION, '3.2.4', '<' ):
+				return "Iconic_WSP_Pagination_Below_3_2_4";
 		}
 	}
 
 	/**
-	 * Load plugin textdomain
+	 * Autoloader
+	 *
+	 * Classes should reside within /inc and follow the format of
+	 * Iconic_The_Name ~ class-the-name.php or {{class-prefix}}The_Name ~ class-the-name.php
+	 */
+	private function autoload( $class_name ) {
+		/**
+		 * If the class being requested does not start with our prefix,
+		 * we know it's not one in our project
+		 */
+		if ( 0 !== strpos( $class_name, 'Iconic_' ) && 0 !== strpos( $class_name, $this->class_prefix ) ) {
+			return;
+		}
+
+		$file_name = strtolower( str_replace(
+			array( $this->class_prefix, 'Iconic_', '_' ),      // Prefix | Plugin Prefix | Underscores
+			array( '', '', '-' ),                              // Remove | Remove | Replace with hyphens
+			$class_name
+		) );
+
+		// Compile our path from the current location
+		$file = dirname( __FILE__ ) . '/inc/class-' . $file_name . '.php';
+
+		// If a file is found
+		if ( file_exists( $file ) ) {
+			// Then load it up!
+			require( $file );
+		}
+	}
+
+	/**
+	 * Load plugin textdomain.
 	 */
 	public function textdomain() {
 		load_plugin_textdomain( 'jck-wsp', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
-	}
-
-	/**
-	 * Frontend: Add the paged param to the shortcode product query
-	 *
-	 * @param WP_Query $query
-	 */
-	public function add_paged_param( $query ) {
-		// Get paged from main query only
-		// ! frontpage missing the post_type
-
-		$is_product_query = $this->is_product_query( $query );
-
-		if ( is_archive() || is_post_type_archive() || ! $is_product_query ) {
-			return;
-		}
-
-		$paged = $this->get_paged_var();
-
-		if ( $query->is_main_query() && $is_product_query ) {
-			$GLOBALS['woocommerce_loop']['paged'] = $paged;
-		}
-
-		$query->is_paged                    = true;
-		$query->query['paged']              = $paged;
-		$query->query_vars['paged']         = $paged;
-		$query->query['no_found_rows']      = false;
-		$query->query_vars['no_found_rows'] = false;
-	}
-
-	/**
-	 * Get paged var
-	 */
-	public static function get_paged_var() {
-		$query_var = is_front_page() ? 'page' : 'paged';
-
-		return get_query_var( $query_var ) ? get_query_var( $query_var ) : 1;
-	}
-
-	/**
-	 * Frontend: Add query params to enable the pagination
-	 *
-	 * @param WP_Query $query
-	 */
-	public function loop_end( $query ) {
-		if ( is_archive() || is_post_type_archive() || ! $this->is_product_query( $query ) ) {
-			return;
-		}
-
-		$paged = self::get_paged_var();
-
-		$GLOBALS['woocommerce_loop']['pagination']['paged']         = $paged;
-		$GLOBALS['woocommerce_loop']['pagination']['found_posts']   = $query->found_posts;
-		$GLOBALS['woocommerce_loop']['pagination']['max_num_pages'] = $query->max_num_pages;
-		$GLOBALS['woocommerce_loop']['pagination']['post_count']    = $query->post_count;
-		$GLOBALS['woocommerce_loop']['pagination']['current_post']  = $query->current_post;
-	}
-
-	/**
-	 * Helper: Is query for products?
-	 *
-	 * @param WP_Query $query
-	 *
-	 * @return bool
-	 */
-	public function is_product_query( $query ) {
-		if ( ! isset( $query->query['post_type'] ) || ! empty( $query->query['p'] ) || isset( $query->query['composite_component'] ) ) {
-			return false;
-		}
-
-		$post_type = $query->query['post_type'];
-
-		if ( is_array( $post_type ) && in_array( 'product', $post_type ) ) {
-			return true;
-		}
-
-		if ( $post_type == "product" ) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Frontend: Add pagination to the shortcode after loop end
-	 *
-	 * @param string $template_name
-	 */
-	public function add_pagination( $template_name, $template_path, $located, $args ) {
-		global $post;
-
-		if ( $template_name !== 'loop/loop-end.php' ) {
-			return;
-		}
-
-		$queried_post = get_queried_object();
-
-		if ( ! $queried_post || ! isset( $queried_post->post_content ) ) {
-			return;
-		}
-
-		if ( ! $this->has_woo_shortcodes( $queried_post->post_content ) ) {
-			return;
-		}
-
-		global $wp_query;
-
-		if ( ! isset( $GLOBALS['woocommerce_loop']['pagination'] ) ) {
-			return;
-		}
-
-		$wp_query->query_vars['paged'] = $GLOBALS['woocommerce_loop']['pagination']['paged'];
-		$wp_query->query['paged']      = $GLOBALS['woocommerce_loop']['pagination']['paged'];
-		$wp_query->max_num_pages       = $GLOBALS['woocommerce_loop']['pagination']['max_num_pages'];
-		$wp_query->found_posts         = $GLOBALS['woocommerce_loop']['pagination']['found_posts'];
-		$wp_query->post_count          = $GLOBALS['woocommerce_loop']['pagination']['post_count'];
-		$wp_query->current_post        = $GLOBALS['woocommerce_loop']['pagination']['current_post'];
-
-		// Custom pagination function or default woocommerce_pagination()
-		woocommerce_pagination();
-	}
-
-	/**
-	 * Helper: Has shortcodes
-	 *
-	 * @param string $content
-	 *
-	 * @return bool
-	 */
-	public function has_woo_shortcodes( $content ) {
-		$shortcodes = apply_filters( 'jck-wsp-shortcodes', array(
-			'product_category',
-			'recent_products',
-			'featured_products',
-			'sale_products',
-			'best_selling_products',
-			'top_rated_products',
-		) );
-
-		if ( empty( $shortcodes ) ) {
-			return false;
-		}
-
-		foreach ( $shortcodes as $shortcode ) {
-			if ( has_shortcode( $content, $shortcode ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Shortcode products query args.
-	 *
-	 * @param array  $query_args
-	 * @param array  $atts
-	 * @param string $loop_name
-	 *
-	 * @return array
-	 */
-	public static function shortcode_products_query_args( $query_args, $atts, $loop_name ) {
-		$query_args['paged'] = self::get_paged_var();
-
-		return $query_args;
-	}
-
-	/**
-	 * Add arg to composite product component.
-	 *
-	 * @param array $args
-	 * @param array $query_args
-	 * @param array $component_data
-	 *
-	 * @return array
-	 */
-	public static function composite_component_options_query_args( $args, $query_args, $component_data ) {
-		$args['composite_component'] = true;
-
-		return $args;
 	}
 }
 
