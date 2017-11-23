@@ -9,7 +9,7 @@ Add pagination to WooCommerce product shortcodes
 
 == Description ==
 
-WooCommerce shortcodes do not have pagination by default. This is a simple plugin that adds it, using the default woocommerce_pagination function.
+WooCommerce shortcodes do not have pagination by default. This is a simple plugin that adds it.
 
 The plugin enables pagination for the following shortcodes:
 
