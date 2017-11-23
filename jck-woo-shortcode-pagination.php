@@ -1,32 +1,17 @@
 <?php
 /*
  * Plugin Name: Shortcode Pagination for WooCommerce
- * Plugin URI: http://www.jckemp.com
- * Description: Adds pagination to WooCommerce Product Category Shortcode
+ * Plugin URI: https://iconicwp.com/products/shortcode-pagination-woocommerce/
+ * Description: Adds pagination to WooCommerce Product Shortcodes
  * Version: 1.0.9
  * Author: James Kemp
- * Author URI: http://www.jckemp.com
+ * Author URI: https://iconicwp.com
  * Text Domain: jck-wsp
  * WC requires at least: 2.6.0
  * WC tested up to: 3.2.4
  */
 
-defined( 'JCK_WSP_PATH' ) or define( 'JCK_WSP_PATH', plugin_dir_path( __FILE__ ) );
-defined( 'JCK_WSP_URL' ) or define( 'JCK_WSP_URL', plugin_dir_url( __FILE__ ) );
-
 class JCK_WSP {
-	public $name = 'WooCommerce Shortcode Pagination';
-
-	public $shortname = 'Shortcode Pagination';
-
-	public $slug = 'jck-wsp';
-
-	public $version = "1.0.9";
-
-	public $plugin_path;
-
-	public $plugin_url;
-
 	/**
 	 * Class prefix
 	 *
@@ -40,17 +25,7 @@ class JCK_WSP {
 	 * Construct the plugin.
 	 */
 	public function __construct() {
-		$this->set_constants();
-
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
-	}
-
-	/**
-	 * Set up plugin constants.
-	 */
-	public function set_constants() {
-		$this->plugin_path = JCK_WSP_PATH;
-		$this->plugin_url  = JCK_WSP_URL;
 	}
 
 	/**
