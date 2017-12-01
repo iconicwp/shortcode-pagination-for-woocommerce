@@ -3,7 +3,7 @@
  * Plugin Name: Shortcode Pagination for WooCommerce
  * Plugin URI: https://iconicwp.com/products/shortcode-pagination-woocommerce/
  * Description: Adds pagination to WooCommerce Product Shortcodes
- * Version: 1.0.9
+ * Version: 1.0.10
  * Author: James Kemp
  * Author URI: https://iconicwp.com
  * Text Domain: jck-wsp

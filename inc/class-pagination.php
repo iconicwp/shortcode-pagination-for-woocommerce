@@ -23,6 +23,7 @@ class Iconic_WSP_Pagination {
 		add_action( 'pre_get_posts', array( __CLASS__, 'add_paged_param' ) );
 		add_filter( 'woocommerce_shortcode_products_query', array( __CLASS__, 'shortcode_products_query_args' ), 10, 3 );
 		add_filter( 'woocommerce_composite_component_options_query_args', array( __CLASS__, 'composite_component_options_query_args' ), 10, 3 );
+		add_filter( 'woocommerce_get_breadcrumb', array( __CLASS__, 'remove_breadcrumb' ), 10, 2 );
 	}
 
 	/**
@@ -129,5 +130,21 @@ class Iconic_WSP_Pagination {
 			'best_selling_products',
 			'top_rated_products',
 		) );
+	}
+
+	/**
+	 * Remove paged breadcrumb from product page.
+	 *
+	 * @param array         $crumbs
+	 * @param WC_Breadcrumb $breadcrumb_object
+	 *
+	 * @return array
+	 */
+	public static function remove_breadcrumb( $crumbs, $breadcrumb_object ) {
+		if ( is_product() ) {
+			array_pop( $crumbs );
+		}
+
+		return $crumbs;
 	}
 }

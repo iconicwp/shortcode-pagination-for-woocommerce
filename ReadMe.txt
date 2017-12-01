@@ -46,6 +46,9 @@ For older versions of WooCommerce it is activated on all valid shortcodes.
 
 == Changelog ==
 
+v1.0.10 (01/12/2017)
+[fix] Remove "Page" from breadcrumbs on single product page.
+
 v1.0.9 (23/11/2017)
 [update] Compatibility with 3.2.4+
 [update] Add 'pagination' param to shortcodes. When 'true', pagination will be displayed.
