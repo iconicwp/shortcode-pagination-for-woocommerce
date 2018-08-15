@@ -9,6 +9,16 @@ Add pagination to WooCommerce product shortcodes
 
 == Description ==
 
+**Important: This functionality is now [included in WooCommerce core](https://docs.woocommerce.com/document/woocommerce-shortcodes/#display-product-attributes). Simply add `paginate="true"` to your `[products]` shortcode.**
+
+Check out some of the other premium [WooCommerce plugins](https://iconicwp.com/) from Iconic:
+
+* [WooThumbs - Additional Variation Images and Customisable Image Gallery](https://iconicwp.com/products/woothumbs/)
+* [WooCommerce Show Single Variations](https://iconicwp.com/products/woocommerce-show-single-variations/)
+* [WooCommerce Attribute Swatches](https://iconicwp.com/products/woocommerce-attribute-swatches/)
+* [WooCommerce Quickview](https://iconicwp.com/products/woocommerce-quickview/)
+* [WooCommerce Delivery Slots](https://iconicwp.com/products/woocommerce-delivery-slots/)
+
 WooCommerce shortcodes do not have pagination by default. This is a simple plugin that adds it.
 
 The plugin enables pagination for the following shortcodes:
@@ -20,14 +30,6 @@ The plugin enables pagination for the following shortcodes:
 * best_selling_products
 * top_rated_products
 * sale_products
-
-Check out some of the other premium [WooCommerce plugins](https://iconicwp.com/) from Iconic:
-
-* [WooThumbs - Additional Variation Images and Customisable Image Gallery](https://iconicwp.com/products/woothumbs/)
-* [WooCommerce Show Single Variations](https://iconicwp.com/products/woocommerce-show-single-variations/)
-* [WooCommerce Attribute Swatches](https://iconicwp.com/products/woocommerce-attribute-swatches/)
-* [WooCommerce Quickview](https://iconicwp.com/products/woocommerce-quickview/)
-* [WooCommerce Delivery Slots](https://iconicwp.com/products/woocommerce-delivery-slots/)
 
 == Installation ==
 To install the plugin:
