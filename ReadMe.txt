@@ -2,7 +2,7 @@
 Contributors: iconicwp
 Donate link: https://www.paypal.me/jamesckemp
 Requires at least: 4.3.1
-Tested up to: 4.9
+Tested up to: 4.9.8
 Stable tag: trunk
 
 Add pagination to WooCommerce product shortcodes
